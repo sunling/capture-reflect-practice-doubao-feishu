@@ -33,7 +33,7 @@ description: 把使用者已经选定的主题发展成一篇可持续修改的�
 
 ## 开始前读取
 
-- 根目录 `PROFILE.md`、`.agents/SOUL.md` 与 `practices/README.md`；
+- 飞书记录系统根目录中的 `PROFILE.md`、`SOUL.md` 与 `practices/README.md`（如有；不存在时不阻塞执行，以本 Skill 的规则为准）；
 - 使用者选定的主题、Review、Daily 路径或直接提供的材料；
 - 输出练习已有的 `mission.md`、`current.md` 与 `drafts/` 中同主题草稿；
 - 与主题直接相关的 `reviews/`，以及跨时间检索后命中的少量 `daily/journal/`、`daily/inputs/` 或 Practice；

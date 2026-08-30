@@ -20,7 +20,7 @@ Daily 中出现线索
 
 ## 开始前读取
 
-- `PROFILE.md` 中的偏好、时区和隐私边界（如可用）；
+- 飞书记录系统根目录中 `PROFILE.md` 的偏好、时区和隐私边界（如可用；不存在时不阻塞执行）；
 - 支持该线索的少量 `daily/journal/` 和 `daily/inputs/`；
 - 同名或近义 Practice 已存在时，读取其 `mission.md`、`current.md` 和当前任务必要的材料。
 
@@ -151,7 +151,7 @@ lark-cli drive +upload --file ./current.md --file-token "{current.md 的 file_to
 ## 隐私与事实边界
 
 - 只读取和写入当前 Practice 必要的材料。
-- 涉及第三方、身体、医疗、关系或工作信息时，遵循 `PROFILE.md`。
+- 涉及第三方、身体、医疗、关系或工作信息时，如飞书根目录中存在 `PROFILE.md`，遵循其中的隐私边界。
 - 不编造使命、受众、行动、反馈或承诺。
 - 公开表达前，单独标记需要匿名化、授权或删除的细节。
 
