@@ -4,7 +4,7 @@
 
 ## 当前任务
 
-- [`weekly-review.md`](weekly-review.md)：每周回看飞书云盘中最近七天的 Journal 和 Notes，保存 Review，并返回问题与可能发展的方向；不会在定时运行中直接生成文章或创建 Practice。
+- [`weekly-review.md`](weekly-review.md)：每周回看飞书云盘中最近七天的 Journals 和 Notes，保存 Review，并返回问题与可能发展的方向；不会在定时运行中直接生成文章或创建 Practice。
 - [`break-bubble.md`](break-bubble.md)：每隔一天推荐一个经过核实、与现有关注有距离的资源；完成前不入库，等用户明确说“完成了”后再保存到飞书云盘。
 
 ## 使用前

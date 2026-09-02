@@ -1,6 +1,6 @@
 ---
 name: capture-journal
-description: 将用户亲历的事件、感受、身体经验或口语化语音转录轻度整理成真实自然的个人日记，并按日期创建或追加到 `journal/`。用于“记录日记”“把这段写进今天或某天的日记”“整理这段语音转录”等核心是“我经历了什么”的请求；保留犹豫和未完成感，不用于保存文章、播客等外部输入。
+description: 将用户亲历的事件、感受、身体经验或口语化语音转录轻度整理成真实自然的个人日记，并按日期创建或追加到 `journals/`。用于“记录日记”“把这段写进今天或某天的日记”“整理这段语音转录”等核心是“我经历了什么”的请求；保留犹豫和未完成感，不用于保存文章、播客等外部输入。
 ---
 
 # Capture Journal｜捕获个人日记
@@ -49,7 +49,7 @@ description: 将用户亲历的事件、感受、身体经验或口语化语音�
 ## 六、存储与追加机制
 所有日记归档在：
 ```text
-journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
+journals/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
 ```
 文件名不使用空格。关键词应仅提取当天第一次记录中发生的一个最重要的核心事件或词语（2–10 个简短中文字符），拒绝罗列多个事项（例如使用"路边桂花"而不是"日常感想"）；不使用标点、斜杠、空格或空泛词语，如"日记""记录""今天"。
 #### 日期解析规则：
@@ -57,8 +57,8 @@ journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
 2. 若用户输入中明确提到"昨天""前天""上周五"或具体日期，必须根据语境写入对应日期的文件；
 3. 中文星期使用 `周一` 到 `周日`，并核对日期与星期确实对应。
 #### 文件执行逻辑：
-1. 解析目标日期，若目标年月文件夹（如 `journal/2026/202606/`）不存在，自动安全创建；
-2. 先按当天日期前缀查找 `journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-*.md`。
+1. 解析目标日期，若目标年月文件夹（如 `journals/2026/202606/`）不存在，自动安全创建；
+2. 先按当天日期前缀查找 `journals/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-*.md`。
 3. **若当天尚无日记文件**：从本轮内容生成关键词，创建 `YYYYMMDD-周X-关键词.md`，写入规定的日记正文。
 4. **若当天已有一个日记文件**：先完整读取，再把本轮片段追加到末尾并用空行隔开。不要因为新增内容改变而反复重命名文件，也不要顺手润色、重排、合并或删除已有记录。
 5. **若意外找到多个同日前缀文件**：不要猜测应写入哪一个，也不要继续创建第三个；先依据用户明确指向选择，否则询问用户。
@@ -68,20 +68,20 @@ journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
 在豆包/AI 环境中，本地文件系统是**临时的**，写入本地文件后**必须上传到飞书 Drive** 才是持久存储。绝不能只创建本地文件就结束任务。
 ### 创建新日记
 1. **在本地工作目录创建 md 文件**，使用相对路径（如 `./{YYYYMMDD}-周X-{关键词}.md`）。
-2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `journal > {YYYY} > {YYYYMM}`。
+2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `journals > {YYYY} > {YYYYMM}`。
 
    > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。每一层都必须先列出父目录下的子项，精确匹配名称；存在则复用 token，不存在才创建。
 
-   1. 搜索 `journal` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；无法确定时让用户确认，不创建新的 `journal`：
+   1. 搜索 `journals` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；无法确定时让用户确认，不创建新的 `journals`：
 
       ```bash
-      lark-cli drive +search --query "journal" --doc-types folder --format json
+      lark-cli drive +search --query "journals" --doc-types folder --format json
       ```
 
-   2. 列出 `journal` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：
+   2. 列出 `journals` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：
 
       ```bash
-      lark-cli drive files list --params '{"folder_token":"{journal文件夹token}","page_size":200}' --format json
+      lark-cli drive files list --params '{"folder_token":"{journals文件夹token}","page_size":200}' --format json
       ```
 
       - 找到 1 个 → 复用其 token；
@@ -89,7 +89,7 @@ journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
       - 找到 0 个 → **只有此时**才执行：
 
         ```bash
-        lark-cli drive +create-folder --name "{YYYY}" --folder-token "{journal文件夹token}"
+        lark-cli drive +create-folder --name "{YYYY}" --folder-token "{journals文件夹token}"
         ```
 
    3. 列出年份文件夹的全部子项，精确筛选 `type == "folder"` 且 `name == "{YYYYMM}"`。若响应还有下一页，继续分页直到列完：
@@ -106,7 +106,7 @@ journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
         lark-cli drive +create-folder --name "{YYYYMM}" --folder-token "{年份文件夹token}"
         ```
 
-   **必须按年月分层组织，不要直接上传到 journal 根目录。** 即使当前 journal 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
+   **必须按年月分层组织，不要直接上传到 journals 根目录。** 即使当前 journals 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
 3. **上传到对应年月文件夹**：
    ```bash
    lark-cli drive +upload --file ./{YYYYMMDD}-周X-{关键词}.md --folder-token "{年月文件夹token}"
@@ -117,7 +117,7 @@ journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
    ```bash
    lark-cli drive files list --params '{"folder_token":"{年月文件夹token}","page_size":200}' --format json
    ```
-   若文件在扁平结构的旧位置（journal 根目录），直接下载后追加，下次覆盖上传时移入新的年月目录。
+   若文件在扁平结构的旧位置（journals 根目录），直接下载后追加，下次覆盖上传时移入新的年月目录。
 2. **从飞书 Drive 下载已有文件**：
    ```bash
    lark-cli drive +download --file-token "{已有文件的file_token}" --output ./{YYYYMMDD}-周X-{关键词}.md
@@ -130,14 +130,14 @@ journal/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
 ### 查找文件和文件夹
 查找文件夹 token：
 ```bash
-lark-cli drive +search --query "journal" --doc-types folder --format json
+lark-cli drive +search --query "journals" --doc-types folder --format json
 ```
 查找某天的日记文件：
 ```bash
 # 先在对应年月文件夹中找
 lark-cli drive files list --params '{"folder_token":"{年月文件夹token}","page_size":200}' --format json
-# 若没找到，再在 journal 根目录找（旧扁平文件）
-lark-cli drive files list --params '{"folder_token":"{journal文件夹token}","page_size":200}' --format json
+# 若没找到，再在 journals 根目录找（旧扁平文件）
+lark-cli drive files list --params '{"folder_token":"{journals文件夹token}","page_size":200}' --format json
 ```
 注意：`--file` 和 `--output` 必须使用**相对路径**，不能用绝对路径，否则会报 `unsafe file path` 错误。
 ---
