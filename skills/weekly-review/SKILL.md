@@ -1,13 +1,13 @@
 ---
 name: weekly-review
-description: 回看最近七天或指定范围内的 `daily/journal/` 与 `daily/inputs/`，识别有证据的反复线索、连接和变化，提出少量问题、候选输出方向并始终将结果存入 `reviews/`；用户回应后继续更新同一档案。用于“回看最近七天”“我最近有什么 pattern”“每周回看”“回答上次回看的问题”等请求及定期回看任务。
+description: 回看最近七天或指定范围内的 `journal/` 与 `inputs/`，识别有证据的反复线索、连接和变化，提出少量问题、候选输出方向并始终将结果存入 `reviews/`；用户回应后继续更新同一档案。用于“回看最近七天”“我最近有什么 pattern”“每周回看”“回答上次回看的问题”等请求及定期回看任务。
 ---
 
 # Weekly Review｜回看、追问与发现方向
 
 ## 目标
 
-把分散在 Daily 中的生活与输入重新带回来，形成一份可追溯的回看档案。帮助使用者看见自己的注意力、回答问题，并发现少量可能的输出或 Practice 方向。
+把分散在 Journal 与 Inputs 中的生活与输入重新带回来，形成一份可追溯的回看档案。帮助使用者看见自己的注意力、回答问题，并发现少量可能的输出或 Practice 方向。
 
 每次运行至少完成：
 
@@ -32,7 +32,7 @@ Weekly Review 到发现方向为止，不在同一流程中起草文章。
 ## 开始前读取
 
 - 飞书记录系统根目录中的 `README.md`、`PROFILE.md`、`ORCHESTRATOR.md` 与 `reviews/README.md`（如有；不存在时不阻塞执行，以本 Skill 的规则为准）；
-- 指定范围内全部 `daily/journal/` 与 `daily/inputs/`；
+- 指定范围内全部 `journal/` 与 `inputs/`；
 - 用户提供的补充材料；
 - 只有需要确认线索是否已进入真实行动时，才读取少量相关 Practice；
 - 只有继续上一次回看时，才读取对应 Review 档案。
@@ -49,7 +49,7 @@ Weekly Review 到发现方向为止，不在同一流程中起草文章。
 
 ## 第一阶段：回看并存档
 
-### 1. 阅读两类 Daily
+### 1. 阅读 Journal 和 Inputs
 
 完整检查范围内的 Journal 与 Input。即使其中一类没有记录，也要诚实说明，不用另一类假装补齐。
 
@@ -156,7 +156,7 @@ Weekly Review 是回看档案，不等于 Practice。只有线索已经反复出
 - 是否使用了正确的日期范围？
 - 每个 pattern 是否有具体日期与路径支撑？
 - 是否提出了少量、开放且不诱导的问题？
-- 是否已经保存或更新 Review，而不是写入 Daily？
+- 是否已经保存或更新 Review，而不是写入 Journal 或 Inputs？
 - 是否只提出候选方向，没有在 Weekly Review 内生成文章？
 - 是否没有从孤立记录创建 Practice？
 

@@ -1,6 +1,6 @@
 ---
 name: develop-practice
-description: 将 Daily 中反复出现、已经行动或获得反馈的线索，发展为最小可持续 Practice；也用于更新现有 Practice 的使命、当前一轮、行动边界与反馈记录。用户说“把这件事变成长期实践”“从记录里发展一个项目”“继续推进这个实践”时使用。
+description: 将 Journal 与 Inputs 中反复出现、已经行动或获得反馈的线索，发展为最小可持续 Practice；也用于更新现有 Practice 的使命、当前一轮、行动边界与反馈记录。用户说“把这件事变成长期实践”“从记录里发展一个项目”“继续推进这个实践”时使用。
 ---
 
 # Develop Practice｜把记录发展成实践
@@ -10,7 +10,7 @@ description: 将 Daily 中反复出现、已经行动或获得反馈的线索，
 把已经在生活里发生的事情整理成可以持续行动、观察和接收反馈的 Practice，而不是从一个孤立念头制造项目。
 
 ```text
-Daily 中出现线索
+Journal 与 Inputs 中出现线索
 → 确认重复、行动或反馈证据
 → 定义最小实践
 → 做一轮真实行动
@@ -21,10 +21,10 @@ Daily 中出现线索
 ## 开始前读取
 
 - 飞书记录系统根目录中 `PROFILE.md` 的偏好、时区和隐私边界（如可用；不存在时不阻塞执行）；
-- 支持该线索的少量 `daily/journal/` 和 `daily/inputs/`；
+- 支持该线索的少量 `journal/` 和 `inputs/`；
 - 同名或近义 Practice 已存在时，读取其 `mission.md`、`current.md` 和当前任务必要的材料。
 
-不要扫描全部历史。若证据不足，说明还缺少什么，让线索继续留在 Daily。
+不要扫描全部历史。若证据不足，说明还缺少什么，让线索继续留在原记录中。
 
 ## 证据门槛
 
@@ -76,7 +76,7 @@ practices/{practice-name}/
 {长期边界}
 
 ## 来源
-- {日期与相关 Daily 相对路径}
+- {日期与相关记录相对路径}
 ```
 
 ### `current.md`
@@ -158,7 +158,7 @@ lark-cli drive +upload --file ./current.md --file-token "{current.md 的 file_to
 ## 完成检查
 
 - 是否存在重复、行动或反馈证据？
-- 是否链接了具体 Daily？
+- 是否链接了具体记录？
 - 是否检查并避免重复 Practice？
 - 是否只保留一个足够小的本轮行动？
 - 是否写清本轮不做什么和下次回看时间？
