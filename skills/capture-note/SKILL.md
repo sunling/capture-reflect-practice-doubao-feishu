@@ -1,15 +1,15 @@
 ---
-name: capture-input
-description: 将文章、书、播客、视频、课程、对话等外部输入，以及由它们触发的闪念和回应，轻量整理并按年月写入 `inputs/`。用于“记录这篇文章”“保存这个播客”“笔记入库”等核心是“我接触到了什么”的请求；不用于记录主要发生在用户本人身上的生活经历。
+name: capture-note
+description: 将文章、书、播客、视频、课程、对话等外部输入，以及由它们触发的闪念和回应，轻量整理并按年月写入 `notes/`。用于“记录这篇文章”“保存这个播客”“笔记入库”等核心是“我接触到了什么”的请求；不用于记录主要发生在用户本人身上的生活经历。
 ---
-# Capture Input｜捕获碎片输入
+# Capture Note｜捕获碎片输入
 ## 目标
 先把真实输入保存下来，不因为分类、提炼或输出压力而丢失当时的触动。
 默认写入：
 ```text
-inputs/{YYYY}/{YYYYMM}/{YYYYMMDD}-{关键词}.md
+notes/{YYYY}/{YYYYMM}/{YYYYMMDD}-{关键词}.md
 ```
-`capture-input` 只负责捕获和轻量整理，不负责一次性生成文章、建立复杂项目或替用户得出成熟结论。
+`capture-note` 只负责捕获和轻量整理，不负责一次性生成文章、建立复杂项目或替用户得出成熟结论。
 知识、智识和智慧可以作为回看一条输入的视角，但不是每条笔记都必须完成的固定栏目：
 - 我接触到的内容是什么；
 - 它为什么在此刻触动我；
@@ -20,7 +20,7 @@ inputs/{YYYY}/{YYYYMM}/{YYYYMMDD}-{关键词}.md
 - 已明确要设计工作坊、咨询材料或社群活动：进入对应 Practice。
 ## 存储与命名
 ```text
-inputs/{YYYY}/{YYYYMM}/
+notes/{YYYY}/{YYYYMM}/
 ```
 规则：
 - 需要确定日期时，如飞书记录系统根目录中存在 `PROFILE.md`，优先读取其中的时区；不存在或未填写时使用当前执行环境的本地日期，若相对日期仍有歧义再询问；
@@ -29,7 +29,7 @@ inputs/{YYYY}/{YYYYMM}/
 - 关键词概括这条输入未来最值得重新找到的内容，不使用空格、斜杠或无意义的版本词；
 - 同日同一输入已有文件时，优先更新原文件，不创建 `v2` 或 `final`；
 - 同日出现不同输入但关键词重名时，进一步具体化关键词；
-- 不向 `inputs/_legacy/` 写入新内容。
+- 不向 `notes/_legacy/` 写入新内容。
 来源不是必填信息。只有原始材料明确提供了书名、节目、平台、作者或对话对象等外部来源时，才在 frontmatter 中增加 `source`。来源不明确时直接省略，不写"其他"，也不要猜测。
 ## 飞书 Drive 上传执行（重要）
 在豆包/AI 环境中，本地文件系统是**临时的**，写入本地文件后**必须上传到飞书 Drive** 才是持久存储。绝不能只创建本地文件就结束任务。
@@ -37,24 +37,24 @@ inputs/{YYYY}/{YYYYMM}/
 执行步骤：
 
 1. **在本地工作目录创建 md 文件**，使用相对路径（如 `./{YYYYMMDD}-{关键词}.md`）。
-2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `inputs > {YYYY} > {YYYYMM}`。
+2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `notes > {YYYY} > {YYYYMM}`。
 
 > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。不检查就直接执行 `create-folder` 会产生重复目录。每一层都必须先列出父目录下的子项，精确匹配名称；存在则复用 token，不存在才创建。
 
-### a. 定位 `inputs` 文件夹
+### a. 定位 `notes` 文件夹
 
 ```bash
-lark-cli drive +search --query "inputs" --doc-types folder --format json
+lark-cli drive +search --query "notes" --doc-types folder --format json
 ```
 
-如果搜索结果中有多个同名 `inputs`，只选择位于记录系统根目录下的目录。无法根据父目录或既有配置确定时，停止创建并让用户确认，不要猜测，也不要再创建一个 `inputs`。
+如果搜索结果中有多个同名 `notes`，只选择位于记录系统根目录下的目录。无法根据父目录或既有配置确定时，停止创建并让用户确认，不要猜测，也不要再创建一个 `notes`。
 
 ### b. 定位或创建 `{YYYY}` 年份文件夹
 
-先列出 `inputs` 下的子项：
+先列出 `notes` 下的子项：
 
 ```bash
-lark-cli drive files list --params '{"folder_token":"{inputs文件夹token}","page_size":200}' --format json
+lark-cli drive files list --params '{"folder_token":"{notes文件夹token}","page_size":200}' --format json
 ```
 
 在返回的 `data.files` 中筛选 `type == "folder"` 且 `name == "{YYYY}"` 的项。若响应显示还有下一页，继续分页直到列完，再判断：
@@ -63,7 +63,7 @@ lark-cli drive files list --params '{"folder_token":"{inputs文件夹token}","pa
 - 找到 0 个 → 才创建：
 
   ```bash
-  lark-cli drive +create-folder --name "{YYYY}" --folder-token "{inputs文件夹token}"
+  lark-cli drive +create-folder --name "{YYYY}" --folder-token "{notes文件夹token}"
   ```
 
 - 找到多个 → 不再创建；优先使用已有记录明确关联的 token，否则让用户选择。
@@ -87,7 +87,7 @@ lark-cli drive files list --params '{"folder_token":"{年份文件夹token}","pa
 
 - 找到多个 → 不再创建；优先使用已有记录明确关联的 token，否则让用户选择。
 
-**必须按年月分层组织，不要直接上传到 inputs 根目录。** 即使当前 inputs 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
+**必须按年月分层组织，不要直接上传到 notes 根目录。** 即使当前 notes 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
 
 3. **上传到对应年月文件夹**：
 

@@ -18,7 +18,7 @@ description: 发现与用户现有信息源有明显距离的高质量资源，�
 ## 开始前读取
 - 飞书记录系统根目录中的 `README.md`（如有；不存在时不阻塞执行）；
 - 用户指定的话题、资源或日期范围；
-- 运行 `discover` 时，按需读取最近少量相关 `inputs/`，避免重复推荐已经完成过的资源或持续停留在同一种领域；
+- 运行 `discover` 时，按需读取最近少量相关 `notes/`，避免重复推荐已经完成过的资源或持续停留在同一种领域；
 - 只有任务需要时，才读取少量 `journal/` 或 Practice 材料。
 不要为了"个性化"穷举个人历史。
 ## 核心原则
@@ -73,7 +73,7 @@ description: 发现与用户现有信息源有明显距离的高质量资源，�
    - 本身有高质量证据、叙事、观察或专业内容；
    - 值得认真花一段时间，而不是只提供一个"有趣事实"；
    - 能作为某个陌生领域的具体入口；
-6. 输出一个待完成任务，不写入 `inputs`；
+6. 输出一个待完成任务，不写入 `notes`；
 7. 等用户真正完成后，再进入 `complete`。
 ### 推荐时的输出格式
 ```md
@@ -89,7 +89,7 @@ description: 发现与用户现有信息源有明显距离的高质量资源，�
 不要求写心得；有想法时再记录想法。
 ```
 ### 不要做的事
-- 不在推荐时自动创建 Input 笔记；
+- 不在推荐时自动创建 Note 笔记；
 - 不因为推荐了资源就假装用户已经阅读；
 - 不附带 5 个"顺便可以看看"；
 - 不要求用户带着问题阅读；
@@ -111,11 +111,11 @@ description: 发现与用户现有信息源有明显距离的高质量资源，�
 ```
 ### 流程
 1. 确认当前会话中最近一个明确的陌生输入资源；
-2. 如果当前上下文无法确定资源，再查看近期 `inputs` 或让用户提供资源名；不要猜；
+2. 如果当前上下文无法确定资源，再查看近期 `notes` 或让用户提供资源名；不要猜；
 3. 如飞书记录系统根目录中存在 `PROFILE.md`，优先使用其中的时区记录实际完成日期和时间；不存在或未填写时使用当前执行环境的本地时区，若日期有歧义再询问；
-4. 按 `capture-input` 规范写入：
+4. 按 `capture-note` 规范写入：
 ```text
-inputs/{YYYY}/{YYYYMM}/{YYYYMMDD}-{keyword}.md
+notes/{YYYY}/{YYYYMM}/{YYYYMMDD}-{keyword}.md
 ```
 5. 默认只记录完成事实，不生成总结；
 6. 如果用户主动说了感受、观察或连接，再把这些真实内容追加进去，不替用户补心得。
@@ -126,7 +126,7 @@ title: "{resource title}"
 date: {YYYY-MM-DD}
 source: "{creator / publication / podcast / channel if known}"
 tags:
-  - input
+  - note
   - bubble-breaker
 ---
 ## 完成记录
@@ -144,7 +144,7 @@ tags:
 ### 去重规则
 - 同一个资源已经有完成记录时，不新建重复文件；
 - 用户是在第二次阅读/收听时，可在原文件追加新的 `再次完成时间`；
-- 同日文件名冲突时，按 `capture-input` 规范具体化关键词；
+- 同日文件名冲突时，按 `capture-note` 规范具体化关键词；
 - 不创建 `v2`、`final`。
 ---
 
@@ -161,26 +161,26 @@ tags:
 在豆包/AI 环境中，本地文件系统是**临时的**，写入本地文件后**必须上传到飞书 Drive** 才是持久存储。绝不能只创建本地文件就结束任务。
 执行步骤（`complete` 模式）：
 1. **在本地工作目录创建 md 文件**，使用相对路径（如 `./{YYYYMMDD}-{关键词}.md`）。
-2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `inputs > {YYYY} > {YYYYMM}`。
+2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `notes > {YYYY} > {YYYYMM}`。
 
    > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。每一层都必须先列出父目录下的子项，精确匹配名称；存在则复用 token，不存在才创建。
 
-   先定位 `inputs`。搜索到多个同名结果时，只选择记录系统根目录下的目录；无法确定时让用户确认：
+   先定位 `notes`。搜索到多个同名结果时，只选择记录系统根目录下的目录；无法确定时让用户确认：
 
    ```bash
-   lark-cli drive +search --query "inputs" --doc-types folder --format json
+   lark-cli drive +search --query "notes" --doc-types folder --format json
    ```
 
-   再完整列出 `inputs` 子项，精确匹配 `type == "folder"` 且 `name == "{YYYY}"`：
+   再完整列出 `notes` 子项，精确匹配 `type == "folder"` 且 `name == "{YYYY}"`：
 
    ```bash
-   lark-cli drive files list --params '{"folder_token":"{inputs文件夹token}","page_size":200}' --format json
+   lark-cli drive files list --params '{"folder_token":"{notes文件夹token}","page_size":200}' --format json
    ```
 
    找到 1 个则复用，找到多个则停止创建并消歧。只有找到 0 个时才执行：
 
    ```bash
-   lark-cli drive +create-folder --name "{YYYY}" --folder-token "{inputs文件夹token}"
+   lark-cli drive +create-folder --name "{YYYY}" --folder-token "{notes文件夹token}"
    ```
 
    然后完整列出年份文件夹子项，精确匹配 `type == "folder"` 且 `name == "{YYYYMM}"`：
@@ -197,7 +197,7 @@ tags:
 
    两次列表响应若还有下一页，都必须继续分页直到列完，再判断匹配数量。
 
-   **必须按年月分层组织，不要直接上传到 inputs 根目录。** 即使当前 inputs 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
+   **必须按年月分层组织，不要直接上传到 notes 根目录。** 即使当前 notes 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
 3. **上传到对应年月文件夹**：
    ```bash
    lark-cli drive +upload --file ./{YYYYMMDD}-{关键词}.md --folder-token "{年月文件夹token}"
@@ -210,7 +210,7 @@ tags:
 - 是否核实了标题、来源和链接？
 - 是否真的比近期 feed 更异质，而不是换语言重复同类内容？
 - 是否避免近期重复领域和重复资源？
-- 是否没有提前写入 Input？
+- 是否没有提前写入 Note？
 - 是否明确告诉用户完成后只需说"完成了"？
 ### complete
 - 用户是否真的明确表示完成？
