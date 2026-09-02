@@ -1,6 +1,6 @@
 # 让记录有下文｜豆包 + 飞书版
 
-**Record. Reflect. Practice.**
+**Capture. Reflect. Practice.**
 
 这是一个与 AI 协作的个人记录、回看与实践系统，也是 **豆包 + 飞书云盘** 路径的独立配置仓库。
 
@@ -12,7 +12,8 @@
 
 ## 包含的 Skills
 
-- [capture-journal](skills/capture-journal/SKILL.md)：记录亲历事件、感受和身体经验，写入飞书云盘的 `journals/`。
+- [capture-journal](skills/capture-journal/SKILL.md)：记录亲历事件、感受和身体经验，保存为 Markdown 文件，写入飞书云盘的 `journals/`。
+- [capture-journal-feishudoc](skills/capture-journal-feishudoc/SKILL.md)：功能同上，但保存为飞书云文档（docx），支持插入图片。
 - [capture-note](skills/capture-note/SKILL.md)：保存文章、播客、书、视频和对话等外部输入，写入 `notes/`。
 - [weekly-review](skills/weekly-review/SKILL.md)：读取最近七天的 Journals 和 Notes，保存 Review、提出问题，并发现少量候选方向。
 - [new-article](skills/new-article/SKILL.md)：围绕选定主题召回材料、追问表达，并持续更新文章草稿。
@@ -36,6 +37,7 @@
 .
 ├── skills/
 │   ├── capture-journal/
+│   ├── capture-journal-feishudoc/
 │   ├── capture-note/
 │   ├── weekly-review/
 │   ├── new-article/

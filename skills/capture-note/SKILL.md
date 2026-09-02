@@ -47,7 +47,11 @@ notes/{YYYY}/{YYYYMM}/
 lark-cli drive +search --query "notes" --doc-types folder --format json
 ```
 
-如果搜索结果中有多个同名 `notes`，只选择位于记录系统根目录下的目录。无法根据父目录或既有配置确定时，停止创建并让用户确认，不要猜测，也不要再创建一个 `notes`。
+如果搜索结果中有多个同名 `notes`，只选择位于记录系统根目录下的目录。如果搜索结果为 0，则直接在飞书 Drive 根目录创建新的 `notes` 文件夹：
+
+```bash
+lark-cli drive +create-folder --name "notes"
+```
 
 ### b. 定位或创建 `{YYYY}` 年份文件夹
 

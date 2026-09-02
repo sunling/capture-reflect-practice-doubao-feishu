@@ -72,10 +72,15 @@ journals/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
 
    > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。每一层都必须先列出父目录下的子项，精确匹配名称；存在则复用 token，不存在才创建。
 
-   1. 搜索 `journals` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；无法确定时让用户确认，不创建新的 `journals`：
+   1. 搜索 `journals` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；如果搜索结果为 0，则直接在飞书 Drive 根目录创建新的 `journals` 文件夹：
 
       ```bash
       lark-cli drive +search --query "journals" --doc-types folder --format json
+      ```
+      
+      如果找不到（0个结果），执行以下命令在根目录创建 `journals` 文件夹：
+      ```bash
+      lark-cli drive +create-folder --name "journals"
       ```
 
    2. 列出 `journals` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：

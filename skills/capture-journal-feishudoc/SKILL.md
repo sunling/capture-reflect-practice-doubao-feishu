@@ -1,5 +1,5 @@
 ---
-name: capture-journal
+name: capture-journal-feishudoc
 description: 将用户亲历的事件、感受、身体经验或口语化语音转录轻度整理成真实自然的个人日记，保存为飞书云文档（docx），支持插入图片。按日期创建或追加到 `journals/{YYYY}/{YYYYMM}/` 下的飞书文档中。用于"记录日记""把这段写进今天或某天的日记""整理这段语音转录""日记里加图片"等核心是"我经历了什么"的请求；保留犹豫和未完成感，不用于保存文章、播客等外部输入。
 ---
 # Capture Journal｜捕获个人日记
@@ -85,9 +85,13 @@ journals > {YYYY} > {YYYYMM}
 ### 前置：定位或创建年月分层目录（必须，先查后建）
 飞书 Drive 路径必须为 `journals > {YYYY} > {YYYYMM}`。
 > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。每一层都必须先列出父目录下的子项，精确匹配名称；存在则复用 token，不存在才创建。
-1. 搜索 `journals` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；无法确定时让用户确认，不创建新的 `journals`：
+1. 搜索 `journals` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；如果搜索结果为 0，则直接在飞书 Drive 根目录创建新的 `journals` 文件夹：
    ```bash
    lark-cli drive +search --query "journals" --doc-types folder --format json
+   ```
+   如果找不到（0个结果），执行以下命令在根目录创建 `journals` 文件夹：
+   ```bash
+   lark-cli drive +create-folder --name "journals"
    ```
 2. 列出 `journals` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：
    ```bash
