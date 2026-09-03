@@ -1,16 +1,16 @@
 ---
 name: develop-practice
-description: 将 Journals 与 Notes 中反复出现、已经行动或获得反馈的线索，发展为最小可持续 Practice；也用于更新现有 Practice 的使命、当前一轮、行动边界与反馈记录。用户说“把这件事变成长期实践”“从记录里发展一个项目”“继续推进这个实践”时使用。
+description: 将 `journals/` 与 `notes/` 中反复出现、已经行动或获得反馈的线索，发展为最小可持续实践；也用于更新 `practices/` 中现有实践的使命、当前一轮、行动边界与反馈记录。用户说“把这件事变成长期实践”“从记录里发展一个项目”“继续推进这个实践”时使用。
 ---
 
 # Develop Practice｜把记录发展成实践
 
 ## 目标
 
-把已经在生活里发生的事情整理成可以持续行动、观察和接收反馈的 Practice，而不是从一个孤立念头制造项目。
+把已经在生活里发生的事情整理成可以持续行动、观察和接收反馈的实践，而不是从一个孤立念头制造项目。
 
 ```text
-Journals 与 Notes 中出现线索
+`journals/` 与 `notes/` 中出现线索
 → 确认重复、行动或反馈证据
 → 定义最小实践
 → 做一轮真实行动
@@ -22,13 +22,13 @@ Journals 与 Notes 中出现线索
 
 - 飞书记录系统根目录中 `PROFILE.md` 的偏好、时区和隐私边界（如可用；不存在时不阻塞执行）；
 - 支持该线索的少量 `journals/` 和 `notes/`；
-- 同名或近义 Practice 已存在时，读取其 `mission.md`、`current.md` 和当前任务必要的材料。
+- `practices/` 中已存在同名或近义实践时，读取其 `mission.md`、`current.md` 和当前任务必要的材料。
 
 不要扫描全部历史。若证据不足，说明还缺少什么，让线索继续留在原记录中。
 
 ## 证据门槛
 
-创建新 Practice 前，至少确认以下一项：
+在 `practices/` 中创建新实践前，至少确认以下一项：
 
 1. **重复**：同一需要、问题或主题出现在多条记录中；
 2. **行动**：用户已经做过至少一次真实尝试；
@@ -39,7 +39,7 @@ Journals 与 Notes 中出现线索
 ## 工作流
 
 1. 确认用户想继续行动，而不只是保存或回看。
-2. 检查是否已有同名或近义 Practice；有则更新，不重复创建。
+2. 检查是否已有同名或近义实践；有则更新，不重复创建。
 3. 与用户确认名称、存在原因、首先服务谁、长期边界和当前一轮。
 4. 只设计一个足够小、能够真实完成的本轮行动。
 5. 写入或更新最小文件结构。
@@ -56,7 +56,7 @@ practices/{practice-name}/
 
 目录名使用小写英文和连字符，不使用空格、`v2` 或 `final`。
 
-如果这是会持续产生文章的输出练习，仍先建立 `mission.md` 和 `current.md`；第一篇文章开始起草时，再由 `new-article` 增加 `drafts/` 并管理其中草稿。单篇文章主题不能替代 Practice 名称。
+如果这是会持续产生文章的输出练习，仍先建立 `mission.md` 和 `current.md`；第一篇文章开始起草时，再由 `new-article` 增加 `drafts/` 并管理其中草稿。单篇文章主题不能替代实践名称。
 
 ### `mission.md`
 
@@ -104,7 +104,7 @@ practices/{practice-name}/
 
 只保留有真实材料的部分，不用空话填满模板。
 
-## 更新现有 Practice
+## 更新现有实践
 
 - 优先更新 `current.md`；使命、对象或长期边界未改变时，不重写 `mission.md`。
 - 先记录已经发生的行动与反馈，再决定下一轮。
@@ -117,16 +117,16 @@ practices/{practice-name}/
 AI 对话环境中的本地文件通常是临时的，长期内容必须上传到飞书 Drive。
 
 1. 使用相对路径准备 `./mission.md` 与 `./current.md`；不要使用绝对路径。
-2. 在 `practices` 下定位或创建 `{practice-name}` 子目录。
+2. 在 `practices/` 下定位或创建 `{practice-name}/` 子目录。
 
-   > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。不能因为搜索不到预期结果就直接创建。先定位目标 `practices`，再完整列出其子项并精确匹配目录名。
+   > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。不能因为搜索不到预期结果就直接创建。先定位目标 `practices/`，再完整列出其子项并精确匹配目录名。
 
    ```bash
    lark-cli drive +search --query "practices" --doc-types folder --format json
    lark-cli drive files list --params '{"folder_token":"{practices文件夹token}","page_size":200}' --format json
    ```
 
-   - 搜索到多个同名 `practices` 时，根据目标系统根目录或既有配置消歧；无法确定时让用户确认，不创建新的根目录；
+   - 搜索到多个名为 `practices` 的文件夹时，根据目标系统根目录或既有配置消歧；无法确定时让用户确认，不创建新的根目录；
    - 完整处理分页后，在 `data.files` 中筛选 `type == "folder"` 且 `name == "{practice-name}"`；
    - 找到 1 个 → 复用其 token，并读取已有 `mission.md` 与 `current.md`；
    - 找到 0 个 → 确认证据门槛后才创建；
@@ -150,7 +150,7 @@ lark-cli drive +upload --file ./current.md --file-token "{current.md 的 file_to
 
 ## 隐私与事实边界
 
-- 只读取和写入当前 Practice 必要的材料。
+- 只读取和写入当前 `practices/` 子目录必要的材料。
 - 涉及第三方、身体、医疗、关系或工作信息时，如飞书根目录中存在 `PROFILE.md`，遵循其中的隐私边界。
 - 不编造使命、受众、行动、反馈或承诺。
 - 公开表达前，单独标记需要匿名化、授权或删除的细节。
@@ -159,7 +159,7 @@ lark-cli drive +upload --file ./current.md --file-token "{current.md 的 file_to
 
 - 是否存在重复、行动或反馈证据？
 - 是否链接了具体记录？
-- 是否检查并避免重复 Practice？
+- 是否检查并避免重复实践？
 - 是否只保留一个足够小的本轮行动？
 - 是否写清本轮不做什么和下次回看时间？
 - 是否已上传到飞书 Drive，而不只保存在临时本地文件？
@@ -169,7 +169,7 @@ lark-cli drive +upload --file ./current.md --file-token "{current.md 的 file_to
 
 简要说明：
 
-1. Practice 目录及创建或更新的文件；
+1. `practices/` 子目录及创建或更新的文件；
 2. 采用的证据；
 3. 当前一轮行动和下次回看时间；
 4. 仍需用户确认的事实或边界。

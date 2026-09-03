@@ -68,22 +68,22 @@ journals/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
 在豆包/AI 环境中，本地文件系统是**临时的**，写入本地文件后**必须上传到飞书 Drive** 才是持久存储。绝不能只创建本地文件就结束任务。
 ### 创建新日记
 1. **在本地工作目录创建 md 文件**，使用相对路径（如 `./{YYYYMMDD}-周X-{关键词}.md`）。
-2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `journals > {YYYY} > {YYYYMM}`。
+2. **定位或创建年月分层目录（必须，先查后建）**：飞书 Drive 路径必须为 `journals/ → {YYYY}/ → {YYYYMM}/`。
 
    > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。每一层都必须先列出父目录下的子项，精确匹配名称；存在则复用 token，不存在才创建。
 
-   1. 搜索 `journals` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；如果搜索结果为 0，则直接在飞书 Drive 根目录创建新的 `journals` 文件夹：
+   1. 搜索名为 `journals` 的文件夹。若有多个同名结果，只选择记录系统根目录下的 `journals/`；如果搜索结果为 0，则直接在飞书 Drive 根目录创建新的 `journals/`：
 
       ```bash
       lark-cli drive +search --query "journals" --doc-types folder --format json
       ```
       
-      如果找不到（0个结果），执行以下命令在根目录创建 `journals` 文件夹：
+      如果找不到（0 个结果），执行以下命令在根目录创建 `journals/`：
       ```bash
       lark-cli drive +create-folder --name "journals"
       ```
 
-   2. 列出 `journals` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：
+   2. 列出 `journals/` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：
 
       ```bash
       lark-cli drive files list --params '{"folder_token":"{journals文件夹token}","page_size":200}' --format json
@@ -111,7 +111,7 @@ journals/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
         lark-cli drive +create-folder --name "{YYYYMM}" --folder-token "{年份文件夹token}"
         ```
 
-   **必须按年月分层组织，不要直接上传到 journals 根目录。** 即使当前 journals 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
+   **必须按年月分层组织，不要直接上传到 `journals/` 根目录。** 即使当前 `journals/` 下是扁平结构，新文件也必须进入年月子目录，逐步完成迁移。
 3. **上传到对应年月文件夹**：
    ```bash
    lark-cli drive +upload --file ./{YYYYMMDD}-周X-{关键词}.md --folder-token "{年月文件夹token}"
@@ -122,7 +122,7 @@ journals/{YYYY}/{YYYYMM}/{YYYYMMDD}-周X-{关键词}.md
    ```bash
    lark-cli drive files list --params '{"folder_token":"{年月文件夹token}","page_size":200}' --format json
    ```
-   若文件在扁平结构的旧位置（journals 根目录），直接下载后追加，下次覆盖上传时移入新的年月目录。
+   若文件在扁平结构的旧位置（`journals/` 根目录），直接下载后追加，下次覆盖上传时移入新的年月目录。
 2. **从飞书 Drive 下载已有文件**：
    ```bash
    lark-cli drive +download --file-token "{已有文件的file_token}" --output ./{YYYYMMDD}-周X-{关键词}.md
@@ -141,7 +141,7 @@ lark-cli drive +search --query "journals" --doc-types folder --format json
 ```bash
 # 先在对应年月文件夹中找
 lark-cli drive files list --params '{"folder_token":"{年月文件夹token}","page_size":200}' --format json
-# 若没找到，再在 journals 根目录找（旧扁平文件）
+# 若没找到，再在 journals/ 根目录找（旧扁平文件）
 lark-cli drive files list --params '{"folder_token":"{journals文件夹token}","page_size":200}' --format json
 ```
 注意：`--file` 和 `--output` 必须使用**相对路径**，不能用绝对路径，否则会报 `unsafe file path` 错误。

@@ -47,7 +47,7 @@ description: 将用户亲历的事件、感受、身体经验或口语化语音�
 ## 六、存储与追加机制
 所有日记归档在飞书云空间的文件夹层级中：
 ```text
-journals > {YYYY} > {YYYYMM}
+journals/ → {YYYY}/ → {YYYYMM}/
 ```
 每天的日记是一篇**飞书云文档（docx）**，文档标题格式为 `{YYYYMMDD}-周X-{关键词}`。
 关键词应仅提取当天第一次记录中发生的一个最重要的核心事件或词语（2–10 个简短中文字符），拒绝罗列多个事项（例如使用"路边桂花"而不是"日常感想"）；不使用标点、斜杠、空格或空泛词语，如"日记""记录""今天"。
@@ -83,17 +83,17 @@ journals > {YYYY} > {YYYYMM}
 ## 八、飞书文档创建与追加执行（重要）
 日记以飞书云文档（docx）形式持久存储。本地 markdown 草稿仅用于传递内容，创建/追加完成后即清理。
 ### 前置：定位或创建年月分层目录（必须，先查后建）
-飞书 Drive 路径必须为 `journals > {YYYY} > {YYYYMM}`。
+飞书 Drive 路径必须为 `journals/ → {YYYY}/ → {YYYYMM}/`。
 > **⚠️ 关键警告**：飞书 Drive 允许同名文件夹并存。每一层都必须先列出父目录下的子项，精确匹配名称；存在则复用 token，不存在才创建。
-1. 搜索 `journals` 文件夹。若有多个同名结果，只选择记录系统根目录下的目录；如果搜索结果为 0，则直接在飞书 Drive 根目录创建新的 `journals` 文件夹：
+1. 搜索名为 `journals` 的文件夹。若有多个同名结果，只选择记录系统根目录下的 `journals/`；如果搜索结果为 0，则直接在飞书 Drive 根目录创建新的 `journals/`：
    ```bash
    lark-cli drive +search --query "journals" --doc-types folder --format json
    ```
-   如果找不到（0个结果），执行以下命令在根目录创建 `journals` 文件夹：
+   如果找不到（0 个结果），执行以下命令在根目录创建 `journals/`：
    ```bash
    lark-cli drive +create-folder --name "journals"
    ```
-2. 列出 `journals` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：
+2. 列出 `journals/` 的全部子项，在 `data.files` 中精确筛选 `type == "folder"` 且 `name == "{YYYY}"`。若响应还有下一页，继续分页直到列完：
    ```bash
    lark-cli drive files list --params '{"folder_token":"{journals文件夹token}","page_size":200}' --format json
    ```
@@ -113,7 +113,7 @@ journals > {YYYY} > {YYYYMM}
      ```bash
      lark-cli drive +create-folder --name "{YYYYMM}" --folder-token "{年份文件夹token}"
      ```
-**必须按年月分层组织，不要直接在 journals 根目录创建文档。** 即使当前 journals 下是扁平结构，新文档也必须进入年月子目录，逐步完成迁移。
+**必须按年月分层组织，不要直接在 `journals/` 根目录创建文档。** 即使当前 `journals/` 下是扁平结构，新文档也必须进入年月子目录，逐步完成迁移。
 ### 创建新日记文档
 1. **在本地创建 markdown 草稿文件**，使用相对路径（如 `./{YYYYMMDD}-周X-{关键词}.md`），内容为符合第四节规范的日记正文。
 2. **定位或创建年月分层目录**（见上方），拿到年月文件夹 token。
@@ -143,7 +143,7 @@ journals > {YYYY} > {YYYYMM}
    ```bash
    lark-cli drive files list --params '{"folder_token":"{年月文件夹token}","page_size":200}' --format json
    ```
-   若文档在扁平结构的旧位置（journals 根目录），直接使用其 token 追加，下次创建新文档时进入新的年月目录。
+   若文档在扁平结构的旧位置（`journals/` 根目录），直接使用其 token 追加，下次创建新文档时进入新的年月目录。
 2. **读取已有文档内容**（确认结构，避免重复标题）：
    ```bash
    lark-cli docs +fetch --doc "{document_id}" --as user
@@ -170,7 +170,7 @@ lark-cli drive +search --query "journals" --doc-types folder --format json
 ```bash
 # 先在对应年月文件夹中找
 lark-cli drive files list --params '{"folder_token":"{年月文件夹token}","page_size":200}' --format json
-# 若没找到，再在 journals 根目录找（旧扁平文件）
+# 若没找到，再在 journals/ 根目录找（旧扁平文件）
 lark-cli drive files list --params '{"folder_token":"{journals文件夹token}","page_size":200}' --format json
 ```
 注意：`docs +create` 和 `docs +update` 的 `--content` 文件路径、`+media-insert` 的 `--file` 路径都必须使用**相对路径**，不能用绝对路径，否则会报 `unsafe file path` 错误。
