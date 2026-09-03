@@ -1,10 +1,10 @@
-# 豆包 + 飞书｜计划任务 Prompt
+# 豆包 + 飞书｜计划任务 Prompts
 
 这里保存需要由豆包按时间主动触发的任务 Prompt。计划任务负责定义触发时间和飞书存储位置，具体执行方式仍以对应 Skill 为准。
 
 ## 当前任务
 
-- [`weekly-review.md`](weekly-review.md)：每周回看飞书云盘中最近七天的 Journals 和 Notes，保存 Review，并返回问题与可能发展的方向；不会在定时运行中直接生成文章或创建 Practice。
+- [`weekly-review.md`](weekly-review.md)：每周回看飞书云盘中最近七天的 `journals/` 和 `notes/`，把回看档案保存到 `reviews/`，并返回问题与可能发展的方向；不会在定时运行中直接生成文章或在 `practices/` 中创建实践。
 - [`break-bubble.md`](break-bubble.md)：每隔一天推荐一个经过核实、与现有关注有距离的资源；完成前不入库，等用户明确说“完成了”后再保存到飞书云盘。
 
 ## 使用前
